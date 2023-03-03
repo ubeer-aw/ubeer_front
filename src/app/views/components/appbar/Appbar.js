@@ -14,6 +14,7 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Rightdrawer from '../rightdrawer/Rightdrawer';
 
 const theme = createTheme({
   status: {
@@ -73,7 +74,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="transparent">
+      <AppBar position="static" color="transparent" elevation={0}>
         <Toolbar>
           <IconButton
             disableRipple
@@ -99,7 +100,7 @@ export default function ButtonAppBar() {
                 inputProps={{ 'aria-label': 'search' }}
               />
             </Search>
-            <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none', borderRadius: '50px'}}><ShoppingCartIcon sx={{mr:1}}/> 0 paniers</Button>
+          <Rightdrawer/>
           </ThemeProvider>
         </Toolbar>
       </AppBar>
