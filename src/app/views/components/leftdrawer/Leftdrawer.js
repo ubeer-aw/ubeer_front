@@ -14,6 +14,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
   status: {
@@ -39,6 +40,7 @@ export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     left: false,
   });
+  const navigate = useNavigate();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -49,28 +51,22 @@ export default function TemporaryDrawer() {
   };
 
   const list = (anchor) => (
+    <ThemeProvider theme={theme}>
     <Box
       sx={{ padding:'8%' }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-        <ThemeProvider theme={theme}>
-            <Stack spacing={1}>
-                <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}}>Inscription</Button>
-                <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none'}}>Connexion</Button>
-            </Stack>
-        </ThemeProvider>
-      <List>
-        {['Créez un compte professionnel', 'Ajoutez votre brasserie', 'Devenez coursier-partenaire'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={text}/>
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+        <Stack spacing={1}>
+            <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}}>Inscription</Button>
+            <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none'}}>Connexion</Button>
+        </Stack>
+        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none'}} onClick={()=>navigate("/ajouter-une-brasserie")}>Ajoutez votre brasserie</Button><br></br>
+        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none'}}>Créez un compte professionnel</Button><br></br>
+        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none'}}>Devenez coursier-partenaire</Button>
     </Box>
+    </ThemeProvider>
   );
 
   return (

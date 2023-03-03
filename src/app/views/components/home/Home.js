@@ -5,6 +5,8 @@ import cardImage from '../../../image/img.jpg';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import Navigator from '../navigation/Navigator';
+import { useNavigate } from 'react-router-dom';
 
 const theme = createTheme({
   status: {
@@ -36,6 +38,7 @@ let cardData = [
 
 
 const Home = () => {
+
   const [cards, setCards] = useState(cardData);
 
   const toggleLike = (card) => {
@@ -49,8 +52,10 @@ const Home = () => {
     cardData = updatedCards;
     setCards(updatedCards);
   };
+  
     return (
         <div>
+          
           <Appbar />
         <div name="card_list" style={{paddingLeft: '25%', paddingTop:'3%', paddingRight:'3%'}}>
         <Typography align="left" variant='h4' sx={{fontWeight:600, paddingBottom:'2%'}}>
