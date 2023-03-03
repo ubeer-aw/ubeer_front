@@ -4,21 +4,3 @@
     align-items: center;
     height: 100vh;
 }
-
-.h1 {
-    display: inline-block;
-    font-size: 8vh;
-}
-
-.white {
-    color: #FFFFFF;
-}
-
-.green {
-    color: #06C167;
-}
-
-.background {
-    background-color: #142328;
-}
-
