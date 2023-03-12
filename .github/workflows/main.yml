@@ -22,8 +22,8 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build Docker image
       run: |
-        docker build -t anymok/ubeer_front:latest .
+        docker build -t anymok/ubeer_front:${{ github.sha }} .
       working-directory: .
     - name: Push Docker image
       run: |
-        docker push anymok/ubeer_front:latest
+        docker push anymok/ubeer_front:${{ github.sha }}
