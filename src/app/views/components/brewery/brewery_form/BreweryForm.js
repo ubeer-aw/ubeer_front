@@ -2,6 +2,8 @@ import React from 'react'
 import { Box, AppBar, Toolbar, Typography, Container, TextField, Button, IconButton  } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { addBrewery } from '../../../../service/brewery.service';
+import axios from 'axios';
 const theme = createTheme({
     status: {
       danger: '#e53e3e',
@@ -23,14 +25,17 @@ const theme = createTheme({
   });
 export default function BreweryForm() {
     const navigate = useNavigate();
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-          name: data.get('name'),
-          description: data.get('description'),
-          img: data.get('img'),
-        });
+        const jsonBrewery = {
+          "name": data.get('name'),
+          "description": data.get('description'),
+          "img": data.get('img'),
+          "stars": data.get('stars'),
+        }
+        const result = await addBrewery(jsonBrewery)
+        console.log(result)
       };
 
   return (
@@ -78,6 +83,7 @@ export default function BreweryForm() {
                         color="dark"
                         margin="normal"
                         fullWidth
+                        required
                         name="description"
                         label="Description de la brasserie"
                         type="text"
@@ -87,8 +93,21 @@ export default function BreweryForm() {
                         <TextField
                         color="dark"
                         margin="normal"
+                        fullWidth
+                        required
+                        id="outlined-number"
+                        name="stars"
+                        label="Note"
+                        type="number"
+                        InputProps={{ inputProps: { min: 0, max: 5, step: "0.5" } }}
+                        />
+
+                        <TextField
+                        color="dark"
+                        margin="normal"
                         required
                         fullWidth
+                        defaultValue="https://picsum.photos/800/300"
                         name="img"
                         label="Lien vers l'image de la brasserie"
                         type="text"

@@ -1,19 +1,11 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Leftdrawer from '../leftdrawer/Leftdrawer'
+import { useMediaQuery, AppBar, Box, Toolbar, Typography, Button, styled, InputBase, IconButton } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import styles from './Appbar.css';
-import { styled, alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
+
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+
+import Leftdrawer from '../leftdrawer/Leftdrawer'
 import Rightdrawer from '../rightdrawer/Rightdrawer';
 
 const theme = createTheme({
@@ -71,39 +63,51 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
+
+
 export default function ButtonAppBar() {
+  const isMobile = useMediaQuery('(max-width:600px)');
+  
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="transparent" elevation={0}>
-        <Toolbar>
-          <IconButton
-            disableRipple
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <Leftdrawer />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <h6 style={{display: 'inline-block', fontSize:'4vh', margin:'0' }}>U</h6><h6 style={{color: '#06C167', display: 'inline-block', fontSize:'4vh', margin:'0' }}>beer</h6>
-          </Typography>
-          <ThemeProvider theme={theme}>
-            <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none', borderRadius: '50px', fontSize:'13px'}}><LocationOnIcon sx={{mr:1}}/> 16 Bd Général de Gaulle • Maintenant</Button>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Brasserie, bière, etc."
-                inputProps={{ 'aria-label': 'search' }}
-              />
-            </Search>
-          <Rightdrawer/>
-          </ThemeProvider>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <>
+    <ThemeProvider theme={theme}>
+        <Box sx={{ flexGrow: 1 }}>
+          <AppBar position="static" color="transparent" elevation={0}>
+            <Toolbar>
+              <IconButton
+                disableRipple
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+              >
+                <Leftdrawer />
+              </IconButton>
+              {!isMobile && ( 
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: "flex", mr: 1 }}>
+                  <h6 style={{display: 'inline-block', fontSize:'6vh', margin:'0' }}>U</h6><h6 style={{color: '#06C167', display: 'inline-block', fontSize:'6vh', margin:'0' }}>beer</h6>
+                </Typography> 
+              )}
+              {isMobile && ( 
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: "flex", mr: 1 }}>
+                  <h6 style={{display: 'inline-block', fontSize:'3vh', margin:'0' }}>U</h6><h6 style={{color: '#06C167', display: 'inline-block', fontSize:'3vh', margin:'0' }}>beer</h6>
+                </Typography> 
+              )}
+              {!isMobile && ( <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none', borderRadius: '50px', fontSize:'13px'}}><LocationOnIcon sx={{mr:1}}/> 16 Bd Général de Gaulle • Maintenant</Button>)}
+                <Search sx={{mr: 1}}>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Brasserie, bière, etc."
+                    inputProps={{ 'aria-label': 'search' }}
+                  />
+                </Search>
+              <Rightdrawer/>
+            </Toolbar>
+          </AppBar>
+        </Box>
+      </ThemeProvider>
+    </>
   );
 }

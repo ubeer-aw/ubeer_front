@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Button, IconButton } from '@mui/material';
+import { Button, IconButton, useMediaQuery } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,6 +12,7 @@ export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     right: false,
   });
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -50,7 +51,37 @@ export default function TemporaryDrawer() {
     <div>
       {['right'].map((anchor) => (
         <React.Fragment key={anchor} >
-          <Button disableElevation onClick={toggleDrawer(anchor, true)} variant="contained" color="dark"  size="large" sx={{textTransform: 'none', borderRadius: '50px'}}><ShoppingCartIcon sx={{mr:1}}/> 0 paniers</Button>
+          {!isMobile && ( 
+            <Button
+              disableElevation
+              onClick={toggleDrawer(anchor, true)}
+              variant="contained"
+              color="dark"
+              size="large"
+              sx={{
+              textTransform: 'none',
+              borderRadius: '50px',
+              fontSize: { xs: '13px', sm: '13px' },
+              padding: { xs: '5px', sm: '10px' },
+              }}
+            >
+              <ShoppingCartIcon sx={{ mr: 1 }} />
+              0 paniers
+            </Button>
+          )}
+          {isMobile && ( 
+            <Button
+              disableElevation
+              onClick={toggleDrawer(anchor, true)}
+              variant="contained"
+              color="dark"
+              sx={{
+              borderRadius: '50px',
+              }}
+            >
+              <ShoppingCartIcon fontSize="small" />
+            </Button>
+          )}
           <Drawer
             anchor={anchor}
             open={state[anchor]}
