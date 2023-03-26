@@ -10,10 +10,16 @@ const Navigator = () => {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
-      <Route path='/ajouter-une-brasserie' element={<BreweryForm />} />
+      
       <Route path='/brasserie/:id' element={<Brewery />} />
+
       <Route path='/gestion-brasserie/:id' element={<ProductCrud />} />
-      <Route path='/ajouter-un-produit/:id' element={<ProductForm />} />
+
+      <Route path='/ajouter-une-brasserie' element={<BreweryForm edit={false} />} />
+      <Route path='/modifier-une-brasserie/:id' element={<BreweryForm edit={true} />} />
+
+      <Route path='/ajouter-un-produit/:id' element={<ProductForm  edit={false} />} />
+      <Route path='/modifier-un-produit/:id' element={<ProductForm edit={true} />} />
     </Routes>
   )
 }

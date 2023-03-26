@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Box, AppBar, Toolbar, Typography, Container, TextField, Button, IconButton  } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addBrewery } from '../../../../service/brewery.service';
+import { addProduct, getProductById, saveProduct } from '../../../../service/product.service';
 import CloseIcon from '@mui/icons-material/Close';
 
 const theme = createTheme({
@@ -24,23 +24,72 @@ const theme = createTheme({
         },
     },
   });
-export default function ProductForm() {
+export default function ProductForm(props) {
+  
     const navigate = useNavigate();
-    const params = useParams()
+    const params = useParams();
+    const [edit, setEdit] = useState(props.edit);
+    const [breweryId, setBreweryId] = useState(null);
+    const [product, setProduct] = useState(null);
+    const [isSubmit, setIsSubmit] = useState(false);
+
+    useEffect(() => {
+      const getData = async () => {
+        if(edit === true) {
+          const data = await getProductById(params.id)
+          setProduct(data)
+          setBreweryId(data.brewery)
+        } else {
+          setProduct([])
+          setBreweryId(params.id)
+        }
+        
+      }
+      getData()
+    }, [])
+
+  
     const handleSubmit = async (event) => {
+        setIsSubmit(true)
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const jsonBrewery = {
-          "name": data.get('name'),
-          "description": data.get('description'),
-          "img": data.get('img'),
-          "stars": data.get('stars'),
+        
+        if(edit) {
+          const jsonProduct = {
+            "id": product.id,
+            "name": data.get('name'),
+            "description": data.get('description'),
+            "img": data.get('img'),
+            "price": data.get('price')
+          }
+          await saveProduct(jsonProduct, breweryId).then(response => {
+            navigate('/gestion-brasserie/' + breweryId);
+            })
+            .catch(error => {
+              console.log(error);
+              
+            });
+        } else {
+          const jsonProduct = {
+            "name": data.get('name'),
+            "description": data.get('description'),
+            "img": data.get('img'),
+            "price": data.get('price')
+          }
+          await addProduct(jsonProduct, breweryId).then(response => {
+          navigate('/gestion-brasserie/' + breweryId);
+          })
+          .catch(error => {
+            console.log(error);
+            
+          });
         }
-        const result = await addBrewery(jsonBrewery)
-        console.log(result)
+        
       };
-
-
+      
+      if (product == null) {
+        return "loading the data";
+      }
   return (
     <div>
         <ThemeProvider theme={theme}>
@@ -55,7 +104,7 @@ export default function ProductForm() {
                     </Toolbar>
                 </AppBar>
             </Box>
-            <IconButton onClick={()=>navigate("/brasserie/" + params.id)}><CloseIcon/></IconButton>
+            <IconButton onClick={()=> navigate("/gestion-brasserie/" + breweryId)  }><CloseIcon/></IconButton>
             
                 <Container component="main" maxWidth="xs">
                     <Box
@@ -67,7 +116,7 @@ export default function ProductForm() {
                     }}
                     >
                     <Typography component="h1" variant="h5">
-                        Ajouter un produit à votre brasserie
+                        { edit ? "Modifier un produit de votre brasserie" : "Ajouter un produit à votre brasserie"}
                     </Typography>
 
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -79,6 +128,7 @@ export default function ProductForm() {
                         id="name"
                         label="Nom"
                         name="name"
+                        defaultValue={product?.name}
                         autoFocus
                         />
 
@@ -89,6 +139,7 @@ export default function ProductForm() {
                         required
                         name="description"
                         label="Description"
+                        defaultValue={product?.description}
                         type="text"
                         id="description"
                         />
@@ -99,6 +150,7 @@ export default function ProductForm() {
                         fullWidth
                         required
                         id="outlined-number"
+                        defaultValue={product?.price}
                         name="price"
                         label="Prix"
                         type="number"
@@ -110,7 +162,7 @@ export default function ProductForm() {
                         margin="normal"
                         required
                         fullWidth
-                        defaultValue="https://picsum.photos/800/300"
+                        defaultValue={edit ? product?.img : "https://picsum.photos/800/300"}
                         name="img"
                         label="Lien vers l'image de la brasserie"
                         type="text"
@@ -118,13 +170,14 @@ export default function ProductForm() {
                         />
 
                         <Button
+                        disabled={isSubmit}
                         type="submit"
                         fullWidth
                         color="dark"
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                         >
-                        Ajouter
+                        {edit ? "Modifier" : "Ajouter"}
                         </Button>
                         
                     </Box>

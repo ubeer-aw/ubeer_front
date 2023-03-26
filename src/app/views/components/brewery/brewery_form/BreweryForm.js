@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Box, AppBar, Toolbar, Typography, Container, TextField, Button, IconButton  } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { addBrewery } from '../../../../service/brewery.service';
+import { useNavigate, useParams } from 'react-router-dom';
+import { addBrewery, getBreweryById, saveBrewery } from '../../../../service/brewery.service';
+import CloseIcon from '@mui/icons-material/Close';
 
 const theme = createTheme({
     status: {
@@ -23,21 +24,63 @@ const theme = createTheme({
         },
     },
   });
-export default function BreweryForm() {
+export default function BreweryForm(props) {
     const navigate = useNavigate();
+    const params = useParams();
+    const [edit, setEdit] = useState(props.edit);
+    const [brewery, setBrewery] = useState(null);
+    const [isSubmit, setIsSubmit] = useState(false);
+
+    useEffect(() => {
+      const getData = async () => {
+        if(edit === true) {
+          const data = await getBreweryById(params.id)
+          setBrewery(data)
+        } else {
+          setBrewery([])
+        }
+        
+      }
+      getData()
+    }, [])
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsSubmit(true);
         const data = new FormData(event.currentTarget);
-        const jsonBrewery = {
-          "name": data.get('name'),
-          "description": data.get('description'),
-          "img": data.get('img'),
-          "stars": data.get('stars'),
+
+        if(edit) {
+          const jsonBrewery = {
+            "id": brewery.id,
+            "name": data.get('name'),
+            "description": data.get('description'),
+            "img": data.get('img'),
+            "stars": data.get('stars'),
+          }
+          await saveBrewery(jsonBrewery).then(response => {
+            navigate('/gestion-brasserie/' + brewery.id);
+            })
+            .catch(error => {
+              console.log(error);
+              
+            });
+        } else {
+          const jsonBrewery = {
+            "name": data.get('name'),
+            "description": data.get('description'),
+            "img": data.get('img'),
+            "stars": data.get('stars'),
+          }
+          await addBrewery(jsonBrewery).then(response => {
+          navigate('/');
+          })
+          .catch(error => {});
         }
-        const result = await addBrewery(jsonBrewery)
-        console.log(result)
       };
 
+      if (brewery == null) {
+        return "loading the data";
+      }
   return (
     <div>
         <ThemeProvider theme={theme}>
@@ -52,7 +95,7 @@ export default function BreweryForm() {
                     </Toolbar>
                 </AppBar>
             </Box>
-
+            <IconButton onClick={()=> { edit ? navigate("/gestion-brasserie/" + brewery?.id) : navigate("/")}  }><CloseIcon/></IconButton>
             
                 <Container component="main" maxWidth="xs">
                     <Box
@@ -64,7 +107,7 @@ export default function BreweryForm() {
                     }}
                     >
                     <Typography component="h1" variant="h5">
-                        Ajouter une brasserie
+                        {edit ?"Modifier une brasserie" : "Ajouter une brasserie"}
                     </Typography>
 
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -73,6 +116,7 @@ export default function BreweryForm() {
                         margin="normal"
                         required
                         fullWidth
+                        defaultValue={brewery?.name}
                         id="name"
                         label="Nom"
                         name="name"
@@ -84,6 +128,7 @@ export default function BreweryForm() {
                         margin="normal"
                         fullWidth
                         required
+                        defaultValue={brewery?.description}
                         name="description"
                         label="Description"
                         type="text"
@@ -96,6 +141,7 @@ export default function BreweryForm() {
                         fullWidth
                         required
                         id="outlined-number"
+                        defaultValue={brewery?.stars}
                         name="stars"
                         label="Note"
                         type="number"
@@ -107,7 +153,7 @@ export default function BreweryForm() {
                         margin="normal"
                         required
                         fullWidth
-                        defaultValue="https://picsum.photos/800/300"
+                        defaultValue={edit ? brewery?.img : "https://picsum.photos/800/300"}
                         name="img"
                         label="Lien vers l'image"
                         type="text"
@@ -116,12 +162,13 @@ export default function BreweryForm() {
 
                         <Button
                         type="submit"
+                        disabled={isSubmit}
                         fullWidth
                         color="dark"
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                         >
-                        Ajouter
+                        {edit ? "Modifier" : "Ajouter"}
                         </Button>
                         
                     </Box>

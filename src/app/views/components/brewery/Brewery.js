@@ -28,43 +28,14 @@ const theme = createTheme({
 export default function Brewery() {
     const navigate = useNavigate();
     const [brewery, setBrewery] = useState(null)
+    const [products, setProducts] = useState([])
     const params = useParams()
-
-    const productList = [
-        {
-            "id":"1",
-            "name":"86",
-            "description":"Pas chère",
-            "img":"https://picsum.photos/800/300",
-            "price":5
-        },
-        {
-            "id":"2",
-            "name":"86",
-            "description":"Pas chère",
-            "img":"https://picsum.photos/800/300",
-            "price":5
-        },
-        {
-            "id":"3",
-            "name":"86",
-            "description":"Pas chère",
-            "img":"https://picsum.photos/800/300",
-            "price":5
-        },
-        {
-            "id":"4",
-            "name":"86",
-            "description":"Pas chère",
-            "img":"https://picsum.photos/800/300",
-            "price":5
-        }
-    ]
       
     useEffect(() => {
       const getData = async () => {
         const data = await getBreweryById(params.id)
         setBrewery(data)
+        setProducts(data.products)
       }
       getData()
     }, [])
@@ -99,7 +70,7 @@ export default function Brewery() {
                 </Grid>
                 
                 <Grid item xs={12} container spacing={2}>
-                    {productList.map(beer => (
+                    {products.map(beer => (
                     <Grid item xs={4} sm={4} md={4} key={beer.id}>
                         <Card elevation={0} sx={{ borderRadius: 0 }}>
 
@@ -140,7 +111,7 @@ export default function Brewery() {
           elevation: 5,
 
         }}>
-           Ajouter un produit
+           Gestion brasserie
         </Button>
       </div>
 

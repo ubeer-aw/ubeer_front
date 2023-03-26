@@ -27,17 +27,37 @@ const getBreweryById = async (id) => {
     }
 }
 
-const addBrewery = async (jsonBrewery) => {
+const saveBrewery = async (jsonBrewery) => {
     try {
-        const response = await api.post(`/brewery`, jsonBrewery)
+        const response = await api.patch(`/brewery`, jsonBrewery)
         return response.data
     } catch (error) {
         console.error(error)
     }
 }
 
+const addBrewery = async (jsonBrewery) => {
+  try {
+      const response = await api.post(`/brewery`, jsonBrewery)
+      return response.data
+  } catch (error) {
+      console.error(error)
+  }
+}
+
+const deleteBrewery = async (id) => {
+  try {
+      const response = await api.delete(`/brewery/${id}`)
+      return response.data
+  } catch (error) {
+      console.error(error)
+  }
+}
+
 export {
     getBrewery,
     getBreweryById,
-    addBrewery
+    addBrewery,
+    saveBrewery,
+    deleteBrewery
 }
