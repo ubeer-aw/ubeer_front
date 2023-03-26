@@ -12,7 +12,7 @@ export default function TemporaryDrawer() {
   const [state, setState] = React.useState({
     right: false,
   });
-  const isMobile = useMediaQuery('(max-width:600px)');
+  const isMobile = useMediaQuery('(max-width:599px)');
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -48,7 +48,7 @@ export default function TemporaryDrawer() {
 
   return (
     
-    <div>
+    <div >
       {['right'].map((anchor) => (
         <React.Fragment key={anchor} >
           {!isMobile && ( 
@@ -59,10 +59,11 @@ export default function TemporaryDrawer() {
               color="dark"
               size="large"
               sx={{
-              textTransform: 'none',
-              borderRadius: '50px',
-              fontSize: { xs: '13px', sm: '13px' },
-              padding: { xs: '5px', sm: '10px' },
+                textTransform: 'none',
+                borderRadius: '50px',
+                inlineSize: 'max-content',
+                fontSize: { xs: '13px', sm: '13px' },
+                padding: { xs: '5px', sm: '10px' },
               }}
             >
               <ShoppingCartIcon sx={{ mr: 1 }} />

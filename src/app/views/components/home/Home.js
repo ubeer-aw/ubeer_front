@@ -29,20 +29,12 @@ const theme = createTheme({
   },
 });
 
-let cardData = [
-  { title: 'Burger King',stars: '3' ,description: 'Frais de livraison : 2.49 € • 10-25 min', liked:false },
-  { title: 'Macdo',stars: '4.7', description: 'Frais de livraison : 2.49 € • 10-25 min', liked:false },
-  { title: 'Quick',stars: '5', description: 'Frais de livraison : 2.49 € • 10-25 min', liked:false },
-  { title: 'O\'tacos',stars: '2.5', description: 'Frais de livraison : 2.49 € • 10-25 min', liked:false },
-  { title: 'KFC',stars: '4.5', description: 'Frais de livraison : 2.49 € • 10-25 min', liked:false }
-];
-
-
 const Home = () => {
   const [brewery, setBrewery] = useState([])
-  const [cards, setCards] = useState(cardData);
+  const navigate = useNavigate();
 
   const toggleLike = (card) => {
+    /*
     const updatedCards = cards.map((c) => {
       if (c.title === card.title) {
         
@@ -51,7 +43,7 @@ const Home = () => {
       return c;
     });
     cardData = updatedCards;
-    setCards(updatedCards);
+    setCards(updatedCards);*/
   };
 
   useEffect(() => {
@@ -74,7 +66,7 @@ const Home = () => {
             {brewery.map(card => (
               <Grid item xs={12} sm={6} md={4} key={card.id}>
                 <Card elevation={0} sx={{ borderRadius: 0 }}>
-                <CardActionArea disableRipple>
+                <CardActionArea onClick={()=>navigate("/brasserie/" + card.id)}>
                   <CardMedia image={card.img} title="Card Image" style={{ height: 0, paddingTop: '56.25%' }} />
                   <CardHeader title={card.name}   titleTypographyProps={{ fontSize: '14px', fontWeight:550 }} sx={{paddingLeft:'1%', paddingTop: '3%', paddingBottom:0}}/>
                   <IconButton onClick={() => toggleLike(card)} sx={{position:'absolute', top:'4%', right:'4%', color:'white'}}>

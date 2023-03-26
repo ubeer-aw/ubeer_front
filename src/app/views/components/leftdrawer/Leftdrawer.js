@@ -62,16 +62,16 @@ export default function TemporaryDrawer() {
             <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}}>Inscription</Button>
             <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none'}}>Connexion</Button>
         </Stack>
-        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none'}} onClick={()=>navigate("/ajouter-une-brasserie")}>Ajoutez votre brasserie</Button><br></br>
-        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none'}}>Créez un compte professionnel</Button><br></br>
-        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none'}}>Devenez coursier-partenaire</Button>
+        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none', textAlign: 'left'}} onClick={()=>navigate("/ajouter-une-brasserie")}>Ajoutez votre brasserie</Button><br></br>
+        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none', textAlign: 'left'}}>Créez un compte professionnel</Button><br></br>
+        <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none', textAlign: 'left'}}>Devenez coursier-partenaire</Button>
     </Box>
     </ThemeProvider>
   );
 
   return (
     
-    <div>
+    <div >
       {['left'].map((anchor) => (
         <React.Fragment key={anchor} >
           <IconButton onClick={toggleDrawer(anchor, true)}><MenuIcon sx={{ color:'black' }}/></IconButton>
@@ -79,7 +79,6 @@ export default function TemporaryDrawer() {
             anchor={anchor}
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
-            
           >
             {list(anchor)}
           </Drawer>

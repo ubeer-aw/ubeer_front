@@ -1,8 +1,9 @@
 import React from 'react'
 import { Box, AppBar, Toolbar, Typography, Container, TextField, Button, IconButton  } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { addBrewery } from '../../../../service/brewery.service';
+import CloseIcon from '@mui/icons-material/Close';
 
 const theme = createTheme({
     status: {
@@ -23,8 +24,9 @@ const theme = createTheme({
         },
     },
   });
-export default function BreweryForm() {
+export default function ProductForm() {
     const navigate = useNavigate();
+    const params = useParams()
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -37,6 +39,7 @@ export default function BreweryForm() {
         const result = await addBrewery(jsonBrewery)
         console.log(result)
       };
+
 
   return (
     <div>
@@ -52,7 +55,7 @@ export default function BreweryForm() {
                     </Toolbar>
                 </AppBar>
             </Box>
-
+            <IconButton onClick={()=>navigate("/brasserie/" + params.id)}><CloseIcon/></IconButton>
             
                 <Container component="main" maxWidth="xs">
                     <Box
@@ -64,7 +67,7 @@ export default function BreweryForm() {
                     }}
                     >
                     <Typography component="h1" variant="h5">
-                        Ajouter une brasserie
+                        Ajouter un produit à votre brasserie
                     </Typography>
 
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -96,8 +99,8 @@ export default function BreweryForm() {
                         fullWidth
                         required
                         id="outlined-number"
-                        name="stars"
-                        label="Note"
+                        name="price"
+                        label="Prix"
                         type="number"
                         InputProps={{ inputProps: { min: 0, max: 5, step: "0.5" } }}
                         />
@@ -109,7 +112,7 @@ export default function BreweryForm() {
                         fullWidth
                         defaultValue="https://picsum.photos/800/300"
                         name="img"
-                        label="Lien vers l'image"
+                        label="Lien vers l'image de la brasserie"
                         type="text"
                         id="img"
                         />

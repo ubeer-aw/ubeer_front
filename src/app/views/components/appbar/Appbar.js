@@ -8,6 +8,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Leftdrawer from '../leftdrawer/Leftdrawer'
 import Rightdrawer from '../rightdrawer/Rightdrawer';
 
+import { useNavigate } from 'react-router-dom';
+
 const theme = createTheme({
   status: {
     danger: '#e53e3e',
@@ -66,45 +68,71 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 export default function ButtonAppBar() {
-  const isMobile = useMediaQuery('(max-width:600px)');
-  
+  const isMobile = useMediaQuery('(max-width:800px)');
+  const navigate = useNavigate();
+
   return (
     <>
     <ThemeProvider theme={theme}>
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static" color="transparent" elevation={0}>
-            <Toolbar>
-              <IconButton
-                disableRipple
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-              >
-                <Leftdrawer />
-              </IconButton>
-              {!isMobile && ( 
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: "flex", mr: 1 }}>
-                  <h6 style={{display: 'inline-block', fontSize:'6vh', margin:'0' }}>U</h6><h6 style={{color: '#06C167', display: 'inline-block', fontSize:'6vh', margin:'0' }}>beer</h6>
-                </Typography> 
+        <Box >
+          <AppBar position="static" color="transparent" elevation={0} >
+
+            <Toolbar style={{ display: 'flex' }}>
+
+              <Leftdrawer />
+
+              {!useMediaQuery('(max-width:600px)') && ( 
+                <IconButton style={{ marginRight: 'auto' }} onClick={()=>navigate("/")}>
+                    
+                      <h6 style={{color:'black', fontSize:'4vh', margin:'0'  }}>U</h6>
+                      <h6 style={{color: '#06C167', fontSize:'4vh', margin:'0' }}>beer</h6>
+                    
+                </IconButton>
               )}
-              {isMobile && ( 
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: "flex", mr: 1 }}>
-                  <h6 style={{display: 'inline-block', fontSize:'3vh', margin:'0' }}>U</h6><h6 style={{color: '#06C167', display: 'inline-block', fontSize:'3vh', margin:'0' }}>beer</h6>
-                </Typography> 
+
+              {useMediaQuery('(max-width:600px)') && ( 
+                <IconButton style={{ marginRight: 'auto' }} onClick={()=>navigate("/")}>
+                  <h6 style={{color:'black', fontSize:'3vh', margin:'0'  }}>U</h6>
+                  <h6 style={{color: '#06C167', fontSize:'3vh', margin:'0' }}>beer</h6>
+                </IconButton>
               )}
-              {!isMobile && ( <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none', borderRadius: '50px', fontSize:'13px'}}><LocationOnIcon sx={{mr:1}}/> 16 Bd Général de Gaulle • Maintenant</Button>)}
+
+              {!useMediaQuery('(max-width:800px)') && ( 
+                <Button disableElevation variant="contained" color="grey" size="large"sx={{ textTransform: 'none', borderRadius: '50px', fontSize: '0.8rem', whiteSpace: 'nowrap', overflow: 'hidden', '@media (max-width: 900px)': { fontSize: '0.6rem' }}}>
+                  <LocationOnIcon fontSize="small" sx={{mr:1}}/> 16 Bd Général de Gaulle • Maintenant
+                </Button>
+              )}
+
+              {!useMediaQuery('(max-width:800px)') && ( 
                 <Search sx={{mr: 1}}>
-                  <SearchIconWrapper>
-                    <SearchIcon />
-                  </SearchIconWrapper>
-                  <StyledInputBase
-                    placeholder="Brasserie, bière, etc."
-                    inputProps={{ 'aria-label': 'search' }}
-                  />
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Brasserie, bière, etc."
+                  inputProps={{ 'aria-label': 'search' }}
+                />
                 </Search>
-              <Rightdrawer/>
+              )}
+
+              {useMediaQuery('(max-width:800px)') && ( 
+                <Search sx={{mr: 1}}>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Brasserie, bière, etc."
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+                </Search>
+ 
+              )}
+              
+
+              <Rightdrawer />
+
             </Toolbar>
+
           </AppBar>
         </Box>
       </ThemeProvider>
