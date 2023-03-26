@@ -31,6 +31,7 @@ const theme = createTheme({
 
 const Home = () => {
   const [brewery, setBrewery] = useState([])
+  const [search, setSearch] = useState('')
   const navigate = useNavigate();
 
   const toggleLike = (card) => {
@@ -46,6 +47,10 @@ const Home = () => {
     setCards(updatedCards);*/
   };
 
+  const handleChange = (e) => {
+    setSearch(e.target.value)
+  }
+
   useEffect(() => {
     const getData = async () => {
       const data = await getBrewery()
@@ -53,17 +58,16 @@ const Home = () => {
     }
     getData()
   }, [])
-
     return (
         <div>
           
-          <Appbar />
+          <Appbar name={search} onNameChange={setSearch}/>
         <div name="card_list" style={{paddingLeft: '25%', paddingTop:'3%', paddingRight:'3%'}}>
         <Typography align="left" variant='h4' sx={{fontWeight:600, paddingBottom:'2%'}}>
           Brasseries <img alt="" role="presentation" src="https://d4p17acsd5wyj.cloudfront.net/eatsfeed/other_icons/Vector.png" width="14" height="14"></img>
         </Typography>
           <Grid container spacing={3}>
-            {brewery.map(card => (
+            {brewery.filter(brewery => brewery.name.includes(search)).map(card => (
               <Grid item xs={12} sm={6} md={4} key={card.id}>
                 <Card elevation={0} sx={{ borderRadius: 0 }}>
                 <CardActionArea onClick={()=>navigate("/brasserie/" + card.id)}>

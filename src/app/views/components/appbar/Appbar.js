@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useCallback } from 'react';
 import { useMediaQuery, AppBar, Box, Toolbar, Typography, Button, styled, InputBase, IconButton } from '@mui/material'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
@@ -67,9 +67,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({ name, onNameChange }) {
   const isMobile = useMediaQuery('(max-width:800px)');
   const navigate = useNavigate();
+
+  const handleInputChange = useCallback(event => {
+    onNameChange(event.target.value)
+  }, [onNameChange])
 
   return (
     <>
@@ -111,6 +115,7 @@ export default function ButtonAppBar() {
                 <StyledInputBase
                   placeholder="Brasserie, bière, etc."
                   inputProps={{ 'aria-label': 'search' }}
+                  onChange={handleInputChange} value={name}
                 />
                 </Search>
               )}
@@ -123,6 +128,7 @@ export default function ButtonAppBar() {
                 <StyledInputBase
                   placeholder="Brasserie, bière, etc."
                   inputProps={{ 'aria-label': 'search' }}
+                  onChange={handleInputChange} value={name}
                 />
                 </Search>
  

@@ -29,6 +29,7 @@ export default function Brewery() {
     const navigate = useNavigate();
     const [brewery, setBrewery] = useState(null)
     const [products, setProducts] = useState([])
+    const [search, setSearch] = useState('');
     const params = useParams()
       
     useEffect(() => {
@@ -43,7 +44,7 @@ export default function Brewery() {
     
   return (
     <>
-        <Appbar />
+        <Appbar name={search} onNameChange={setSearch} />
         <Box
         component="img"
         sx={{
@@ -70,7 +71,7 @@ export default function Brewery() {
                 </Grid>
                 
                 <Grid item xs={12} container spacing={2}>
-                    {products.map(beer => (
+                    {products.filter(products => products.name.includes(search)).map(beer => (
                     <Grid item xs={4} sm={4} md={4} key={beer.id}>
                         <Card elevation={0} sx={{ borderRadius: 0 }}>
 
