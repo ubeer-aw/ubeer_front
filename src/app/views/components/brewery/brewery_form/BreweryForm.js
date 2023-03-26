@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import { addBrewery, getBreweryById, saveBrewery } from '../../../../service/brewery.service';
 import CloseIcon from '@mui/icons-material/Close';
+import Loading from '../../loading/Loading';
 
 const theme = createTheme({
     status: {
@@ -79,7 +80,7 @@ export default function BreweryForm(props) {
       };
 
       if (brewery == null) {
-        return "loading the data";
+        return <Loading/>;
       }
   return (
     <div>
