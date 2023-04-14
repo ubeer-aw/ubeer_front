@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: "http://192.168.1.60:8080",
+  baseURL: "http://localhost:8080",
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -12,7 +12,7 @@ const api = axios.create({
 const getProductById = async (productId) => {
   try {
       const response = await api.get(`/product/${productId}`)
-      return response.data
+      return response
   } catch (error) {
       console.error(error)
   }

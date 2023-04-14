@@ -67,7 +67,7 @@ const Home = () => {
           Brasseries <img alt="" role="presentation" src="https://d4p17acsd5wyj.cloudfront.net/eatsfeed/other_icons/Vector.png" width="14" height="14"></img>
         </Typography>
           <Grid container spacing={3}>
-            {brewery.filter(brewery => brewery.name.includes(search)).map(card => (
+            {brewery?.filter(brewery => brewery.name.toLowerCase().includes(search.toLowerCase())).map(card => (
               <Grid item xs={12} sm={6} md={4} key={card.id}>
                 <Card elevation={0} sx={{ borderRadius: 0 }}>
                 <CardActionArea onClick={()=>navigate("/brasserie/" + card.id)}>

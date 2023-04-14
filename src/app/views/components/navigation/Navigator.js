@@ -4,6 +4,7 @@ import BreweryForm from '../brewery/brewery_form/BreweryForm'
 import Brewery from '../brewery/Brewery'
 import ProductForm from '../product/product_form/ProductForm'
 import ProductCrud from '../product/ProductCrud'
+import Product from '../product/Product'
 
 
 const Navigator = () => {
@@ -12,6 +13,7 @@ const Navigator = () => {
       <Route path='/' element={<Home />} />
       
       <Route path='/brasserie/:id' element={<Brewery />} />
+      <Route path='/brasserie/:brewery/:product' element={<Product />} />
 
       <Route path='/gestion-brasserie/:id' element={<ProductCrud />} />
 
