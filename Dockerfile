@@ -9,7 +9,7 @@ COPY package.json .
 COPY package-lock.json .
 
 # Installe les dépendances de l'application
-RUN npm ci --only=production --production
+RUN npm ci --only=production
 
 COPY . .
 
