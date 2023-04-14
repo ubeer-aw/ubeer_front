@@ -19,8 +19,8 @@ RUN npm ci --only=production \
 # Copie les fichiers de l'application dans le répertoire de travail
 COPY . .
 
-# Expose le port 8080
-EXPOSE 8080
+# Expose le port 3000
+EXPOSE 3000
 
 # Démarre l'application React.js
 CMD ["npm", "start"]
