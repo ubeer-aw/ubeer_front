@@ -1,5 +1,5 @@
 # Utilise l'image de Node.js comme image de base
-FROM node:14-alpine
+FROM node:slim
 
 # Crée un répertoire de travail pour l'application
 WORKDIR /app
