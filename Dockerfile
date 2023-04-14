@@ -1,5 +1,5 @@
 # Utilise l'image de Node.js comme image de base
-FROM node:alpine
+FROM node:14-alpine
 
 # Crée un répertoire de travail pour l'application
 WORKDIR /app
@@ -9,7 +9,7 @@ COPY package.json .
 COPY package-lock.json .
 
 # Installe les dépendances de l'application
-RUN npm ci
+RUN npm ci --only=production --production
 
 COPY . .
 
