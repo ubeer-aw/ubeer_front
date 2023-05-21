@@ -15,6 +15,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import LoginButton from '../Auth/LoginButton';
+import LogoutButton from '../Auth/LogoutButton';
 
 const theme = createTheme({
   status: {
@@ -60,7 +62,9 @@ export default function TemporaryDrawer() {
     >
         <Stack spacing={1}>
             <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}}>Inscription</Button>
-            <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none'}}>Connexion</Button>
+            <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none'}} >Connexion</Button>
+            <LoginButton></LoginButton>
+            <LogoutButton></LogoutButton>
         </Stack>
         <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none', textAlign: 'left'}} onClick={()=>navigate("/ajouter-une-brasserie")}>Ajoutez votre brasserie</Button><br></br>
         <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none', textAlign: 'left'}}>Créez un compte professionnel</Button><br></br>
