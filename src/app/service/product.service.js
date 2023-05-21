@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://localhost:8080/api",
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -11,7 +11,7 @@ const api = axios.create({
 
 const getProductById = async (productId) => {
   try {
-      const response = await api.get(`/product/${productId}`)
+      const response = await api.get(`/public/product/${productId}`)
       return response
   } catch (error) {
       console.error(error)
@@ -20,7 +20,7 @@ const getProductById = async (productId) => {
 
 const addProduct = async (jsonProduct, breweryId) => {
     try {
-        const response = await api.post(`/product?breweryId=${breweryId}`, jsonProduct)
+        const response = await api.post(`/public/product?breweryId=${breweryId}`, jsonProduct)
         return response.data
     } catch (error) {
         console.error(error)
@@ -29,7 +29,7 @@ const addProduct = async (jsonProduct, breweryId) => {
 
 const saveProduct = async (jsonProduct, breweryId) => {
   try {
-      const response = await api.patch(`/product?breweryId=${breweryId}`, jsonProduct)
+      const response = await api.patch(`/private/product?breweryId=${breweryId}`, jsonProduct)
       return response.data
   } catch (error) {
       console.error(error)
@@ -38,7 +38,7 @@ const saveProduct = async (jsonProduct, breweryId) => {
 
 const deleteProduct = async (productId) => {
   try {
-      const response = await api.delete(`/product/${productId}`)
+      const response = await api.delete(`/private/product/${productId}`)
       return response.data
   } catch (error) {
       console.error(error)

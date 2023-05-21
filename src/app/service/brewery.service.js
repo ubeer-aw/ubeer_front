@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { useAuth0 } from '@auth0/auth0-react';
 
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://localhost:8080/api",
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -10,8 +11,14 @@ const api = axios.create({
 })
 
 const getBrewery = async () => {
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   try {
-    const response = await api.get('/brewery')
+    if (isAuthenticated) {
+      const token = await getAccessTokenSilently();
+      // Utilisez le jeton JWT ici pour les requêtes axios ou effectuez toute autre action nécessaire
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await api.get('/public/brewery')
     return response.data
   } catch (error) {
     console.error(error)
@@ -20,7 +27,7 @@ const getBrewery = async () => {
 
 const getBreweryById = async (id) => {
     try {
-        const response = await api.get(`/brewery/${id}`)
+        const response = await api.get(`/public/brewery/${id}`)
         return response.data
     } catch (error) {
         console.error(error)
@@ -29,7 +36,7 @@ const getBreweryById = async (id) => {
 
 const saveBrewery = async (jsonBrewery) => {
     try {
-        const response = await api.patch(`/brewery`, jsonBrewery)
+        const response = await api.patch(`/private/brewery`, jsonBrewery)
         return response.data
     } catch (error) {
         console.error(error)
@@ -38,7 +45,7 @@ const saveBrewery = async (jsonBrewery) => {
 
 const addBrewery = async (jsonBrewery) => {
   try {
-      const response = await api.post(`/brewery`, jsonBrewery)
+      const response = await api.post(`/private/brewery`, jsonBrewery)
       return response.data
   } catch (error) {
       console.error(error)
@@ -47,7 +54,7 @@ const addBrewery = async (jsonBrewery) => {
 
 const deleteBrewery = async (id) => {
   try {
-      const response = await api.delete(`/brewery/${id}`)
+      const response = await api.delete(`/private/brewery/${id}`)
       return response.data
   } catch (error) {
       console.error(error)
