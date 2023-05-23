@@ -30,6 +30,13 @@ const theme = createTheme({
 });
 
 const Home = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectParam = urlParams.get('redirect');
+
+  if (redirectParam === 'true') {
+    window.location.replace(window.location.pathname);
+  }
+
   const [brewery, setBrewery] = useState([])
   const [search, setSearch] = useState('')
   const navigate = useNavigate();
@@ -58,6 +65,8 @@ const Home = () => {
     }
     getData()
   }, [])
+
+
     return (
         <div>
           

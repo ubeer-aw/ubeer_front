@@ -15,8 +15,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import LoginButton from '../Auth/LoginButton';
 import { useAuth0 } from '@auth0/auth0-react';
+import LoginButton from '../Auth/LoginButton';
+import RegisterButton from '../Auth/RegisterButton';
 import LogoutButton from '../Auth/LogoutButton';
 
 const theme = createTheme({
@@ -62,8 +63,6 @@ export default function TemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-        
-           
             { user ? (
               <Stack spacing={1}>
                 <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}} onClick={()=>navigate("/profile")}>Mon Compte</Button>
@@ -71,7 +70,7 @@ export default function TemporaryDrawer() {
               </Stack>
             ) : (
               <Stack spacing={1}>
-                <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}}>Inscription</Button>
+                <RegisterButton></RegisterButton>
                 <LoginButton></LoginButton>
               </Stack>
             )}
