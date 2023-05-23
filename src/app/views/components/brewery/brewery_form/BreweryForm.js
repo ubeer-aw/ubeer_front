@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Box, AppBar, Toolbar, Typography, Container, TextField, Button, IconButton  } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addBrewery, getBreweryById, saveBrewery } from '../../../../service/brewery.service';
+import BreweryApiService from '../../../../service/brewery.service';
 import CloseIcon from '@mui/icons-material/Close';
 import Loading from '../../loading/Loading';
 
@@ -35,7 +35,7 @@ export default function BreweryForm(props) {
     useEffect(() => {
       const getData = async () => {
         if(edit === true) {
-          const data = await getBreweryById(params.id)
+          const data = await BreweryApiService().getBreweryById(params.id)
           setBrewery(data)
         } else {
           setBrewery([])
@@ -58,7 +58,7 @@ export default function BreweryForm(props) {
             "img": data.get('img'),
             "stars": data.get('stars'),
           }
-          await saveBrewery(jsonBrewery).then(response => {
+          await BreweryApiService().saveBrewery(jsonBrewery).then(response => {
             navigate('/gestion-brasserie/' + brewery.id);
             })
             .catch(error => {
@@ -72,7 +72,7 @@ export default function BreweryForm(props) {
             "img": data.get('img'),
             "stars": data.get('stars'),
           }
-          await addBrewery(jsonBrewery).then(response => {
+          await BreweryApiService().addBrewery(jsonBrewery).then(response => {
           navigate('/');
           })
           .catch(error => {});

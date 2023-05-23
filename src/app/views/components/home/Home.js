@@ -7,7 +7,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Navigator from '../navigation/Navigator';
 import { useNavigate } from 'react-router-dom';
-import { getBrewery } from '../../../service/brewery.service';
+import BreweryApiService from '../../../service/brewery.service';
 
 const theme = createTheme({
   status: {
@@ -53,7 +53,7 @@ const Home = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getBrewery()
+      const data = await BreweryApiService().getBrewery()
       setBrewery(data)
     }
     getData()
