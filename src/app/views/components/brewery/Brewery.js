@@ -3,6 +3,7 @@ import { Grid, Box, Card, CardActionArea, CardMedia, CardHeader, CardContent, Ty
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams  } from 'react-router-dom';
 import Appbar from '../appbar/Appbar';
+import { useAuth0 } from '@auth0/auth0-react';
 import BreweryApiService from '../../../service/brewery.service';
 
 const theme = createTheme({
@@ -26,17 +27,25 @@ const theme = createTheme({
 });
 
 export default function Brewery() {
+  const {user, isAuthenticated} = useAuth0();
     const navigate = useNavigate();
     const [brewery, setBrewery] = useState(null)
     const [products, setProducts] = useState([])
     const [search, setSearch] = useState('');
     const params = useParams()
       
+
+    
     useEffect(() => {
       const getData = async () => {
         const data = await BreweryApiService().getBreweryById(params.id)
         setBrewery(data)
         setProducts(data.products)
+        if(brewery?.user){
+          if(localStorage.getItem('user_email') != brewery.user.email) {
+            navigate('/')
+          }
+        }
       }
       getData()
     }, [])
@@ -99,7 +108,8 @@ export default function Brewery() {
 
 
         <div>
-        <Button color="primary"  variant="contained" onClick={()=>navigate("/gestion-brasserie/" + brewery.id)}
+          
+        { isAuthenticated & (user?.email == brewery?.user?.email) ? (<Button color="primary"  variant="contained" onClick={()=>navigate("/gestion-brasserie/" + brewery.id)}
         sx={{
             textTransform: 'none',
           position: 'fixed',
@@ -113,7 +123,8 @@ export default function Brewery() {
 
         }}>
            Gestion brasserie
-        </Button>
+        </Button>) : null
+        }
       </div>
 
 

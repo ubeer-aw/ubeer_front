@@ -5,6 +5,7 @@ import { useNavigate, useParams  } from 'react-router-dom';
 import Appbar from '../appbar/Appbar';
 import BreweryApiService from '../../../service/brewery.service';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const theme = createTheme({
     status: {
@@ -27,17 +28,23 @@ const theme = createTheme({
 });
 
 export default function Product() {
+  const {user} = useAuth0();
     const navigate = useNavigate();
     const [brewery, setBrewery] = useState(null)
     const [product, setProduct] = useState(null)
     const [search, setSearch] = useState('');
     const params = useParams()
+    
       
     useEffect(() => {
       const getData = async () => {
         const data = await BreweryApiService().getBreweryById(params.brewery)
         setBrewery(data)
-        console.log(data)
+        if(brewery?.user){
+          if(localStorage.getItem('user_email') != brewery.user.email) {
+            navigate('/')
+          }
+        }
       }
       getData()
     }, [])

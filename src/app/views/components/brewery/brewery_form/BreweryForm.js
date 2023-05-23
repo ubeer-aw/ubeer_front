@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BreweryApiService from '../../../../service/brewery.service';
 import CloseIcon from '@mui/icons-material/Close';
 import Loading from '../../loading/Loading';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const theme = createTheme({
     status: {
@@ -26,6 +27,7 @@ const theme = createTheme({
     },
   });
 export default function BreweryForm(props) {
+    const { user } = useAuth0();
     const navigate = useNavigate();
     const params = useParams();
     const [edit, setEdit] = useState(props.edit);
@@ -37,6 +39,11 @@ export default function BreweryForm(props) {
         if(edit === true) {
           const data = await BreweryApiService().getBreweryById(params.id)
           setBrewery(data)
+          if(brewery?.user){
+            if(localStorage.getItem('user_email') != brewery.user.email) {
+              navigate('/')
+            }
+          }
         } else {
           setBrewery([])
         }

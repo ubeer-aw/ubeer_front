@@ -19,6 +19,7 @@ export default function AuthRedirect() {
         getAccessTokenSilently().then(res => {
             localStorage.clear()
             localStorage.setItem("jwtToken", res)
+            localStorage.setItem("user_email", user.email)
             navigate('/?redirect=true')
         })
     }

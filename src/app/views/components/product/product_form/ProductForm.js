@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Box, AppBar, Toolbar, Typography, Container, TextField, Button, IconButton  } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addProduct, getProductById, saveProduct } from '../../../../service/product.service';
+import ProductApiService from '../../../../service/product.service';
 import CloseIcon from '@mui/icons-material/Close';
 import Loading from '../../loading/Loading';
 
@@ -34,10 +34,12 @@ export default function ProductForm(props) {
     const [product, setProduct] = useState(null);
     const [isSubmit, setIsSubmit] = useState(false);
 
+
+    
     useEffect(() => {
       const getData = async () => {
         if(edit === true) {
-          const data = await getProductById(params.id)
+          const data = await ProductApiService().getProductById(params.id)
           setProduct(data)
           setBreweryId(data.brewery)
         } else {
@@ -63,7 +65,7 @@ export default function ProductForm(props) {
             "img": data.get('img'),
             "price": data.get('price')
           }
-          await saveProduct(jsonProduct, breweryId).then(response => {
+          await ProductApiService().saveProduct(jsonProduct, breweryId).then(response => {
             navigate('/gestion-brasserie/' + breweryId);
             })
             .catch(error => {
@@ -77,7 +79,7 @@ export default function ProductForm(props) {
             "img": data.get('img'),
             "price": data.get('price')
           }
-          await addProduct(jsonProduct, breweryId).then(response => {
+          await ProductApiService().addProduct(jsonProduct, breweryId).then(response => {
           navigate('/gestion-brasserie/' + breweryId);
           })
           .catch(error => {

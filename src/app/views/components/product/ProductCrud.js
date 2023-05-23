@@ -3,11 +3,12 @@ import { Box, AppBar, Toolbar, Typography, IconButton, Grid, Card, CardActionAre
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
+import ProductApiService from '../../../service/product.service';
 import BreweryApiService from '../../../service/brewery.service';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { deleteProduct } from '../../../service/product.service';
+import { useAuth0 } from '@auth0/auth0-react';
 
 
 const theme = createTheme({
@@ -30,6 +31,7 @@ const theme = createTheme({
     },
   });
 export default function ProductCrud() {
+  const {user} = useAuth0();
     const navigate = useNavigate();
     const [brewery, setBrewery] = useState(null)
     const [products, setProducts] = useState([])
@@ -94,6 +96,11 @@ export default function ProductCrud() {
           const data = await BreweryApiService().getBreweryById(params.id)
           setBrewery(data)
           setProducts(data.products)
+          if(brewery?.user){
+            if(localStorage.getItem('user_email') != brewery.user.email) {
+              navigate('/')
+            }
+          }
         }
         getData()
     }, [])
@@ -102,7 +109,7 @@ export default function ProductCrud() {
     const handleDeleteProductClick = (id) => () => {
       setProducts(products.filter(product => product.id !== id))
       const getData = async () => {
-        await BreweryApiService().deleteProduct(id).then(response => {
+        await ProductApiService().deleteProduct(id).then(response => {
           setProducts(products.filter(product => product.id !== id))
         })
         .catch(error => {
@@ -150,7 +157,7 @@ export default function ProductCrud() {
             </Grid>
             <Grid item xs={12} container spacing={2} sx={{padding:'5%'}}>
             <div>
-              <Button color="primary"  variant="contained" onClick={()=>navigate("/ajouter-un-produit/" + brewery.id)}
+              <Button color="primary"  variant="contained" onClick={()=>navigate("/ajouter-un-produit/" + brewery?.id)}
               sx={{
                   textTransform: 'none',
                   background: "linear-gradient(0deg, rgba(245, 245, 245, 0.12), rgba(245, 245, 245, 0.12)), #000000",
@@ -181,7 +188,7 @@ export default function ProductCrud() {
           }}>
             Supprimer la brasserie
           </Button>
-          <Button color="primary"  variant="contained" onClick={()=>navigate("/modifier-une-brasserie/" + brewery.id)}
+          <Button color="primary"  variant="contained" onClick={()=>navigate("/modifier-une-brasserie/" + brewery?.id)}
           sx={{
               textTransform: 'none',
         

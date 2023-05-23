@@ -86,7 +86,7 @@ export default function ButtonAppBar({ name, onNameChange }) {
               <Leftdrawer />
 
               {!useMediaQuery('(max-width:600px)') && ( 
-                <IconButton style={{ marginRight: 'auto' }} onClick={()=>navigate("/")}>
+                <IconButton style={{ marginRight: 'auto' }} disableRipple onClick={()=>navigate("/")}>
                     
                       <h6 style={{color:'black', fontSize:'4vh', margin:'0'  }}>U</h6>
                       <h6 style={{color: '#06C167', fontSize:'4vh', margin:'0' }}>beer</h6>

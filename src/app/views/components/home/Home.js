@@ -8,7 +8,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Navigator from '../navigation/Navigator';
 import { useNavigate } from 'react-router-dom';
 import BreweryApiService from '../../../service/brewery.service';
-
+import UserApiService from '../../../service/user.service';
+import { useAuth0 } from '@auth0/auth0-react';
 const theme = createTheme({
   status: {
     danger: '#e53e3e',
@@ -30,10 +31,16 @@ const theme = createTheme({
 });
 
 const Home = () => {
+  const {user} = useAuth0();
   const urlParams = new URLSearchParams(window.location.search);
   const redirectParam = urlParams.get('redirect');
+  const redirectParamAuth = urlParams.get('auth');
 
   if (redirectParam === 'true') {
+    window.location.replace(window.location.pathname + "?auth=true");
+  }
+  if (redirectParamAuth === 'true') {
+    UserApiService().addUser(user.email)
     window.location.replace(window.location.pathname);
   }
 
@@ -62,6 +69,7 @@ const Home = () => {
     const getData = async () => {
       const data = await BreweryApiService().getBrewery()
       setBrewery(data)
+      console.log(data)
     }
     getData()
   }, [])
