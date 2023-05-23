@@ -1,26 +1,20 @@
-import axios from 'axios'
+import publicAPI from './Config/publicAxiosConfig';
+import privateAPI from './Config/privateAxiosConfig';
 
-const api = axios.create({
-  baseURL: "http://ubeer-back--uf92q9y.icypond-fbdb4d78.francecentral.azurecontainerapps.io/",
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-  timeout: 10000
-})
-
+///// PUBLIC API (WITHOUT JWT TOKEN)
 const getProductById = async (productId) => {
   try {
-      const response = await api.get(`/product/${productId}`)
+      const response = await publicAPI.get(`/product/${productId}`)
       return response
   } catch (error) {
       console.error(error)
   }
 }
 
+//// PRIVATE API (WITH JWT TOKEN)
 const addProduct = async (jsonProduct, breweryId) => {
     try {
-        const response = await api.post(`/product?breweryId=${breweryId}`, jsonProduct)
+        const response = await privateAPI.post(`/product?breweryId=${breweryId}`, jsonProduct)
         return response.data
     } catch (error) {
         console.error(error)
@@ -29,7 +23,7 @@ const addProduct = async (jsonProduct, breweryId) => {
 
 const saveProduct = async (jsonProduct, breweryId) => {
   try {
-      const response = await api.patch(`/product?breweryId=${breweryId}`, jsonProduct)
+      const response = await privateAPI.patch(`/product?breweryId=${breweryId}`, jsonProduct)
       return response.data
   } catch (error) {
       console.error(error)
@@ -38,7 +32,7 @@ const saveProduct = async (jsonProduct, breweryId) => {
 
 const deleteProduct = async (productId) => {
   try {
-      const response = await api.delete(`/product/${productId}`)
+      const response = await privateAPI.delete(`/product/${productId}`)
       return response.data
   } catch (error) {
       console.error(error)

@@ -7,7 +7,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Navigator from '../navigation/Navigator';
 import { useNavigate } from 'react-router-dom';
-import { getBrewery } from '../../../service/brewery.service';
+import BreweryApiService from '../../../service/brewery.service';
 
 const theme = createTheme({
   status: {
@@ -30,6 +30,13 @@ const theme = createTheme({
 });
 
 const Home = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectParam = urlParams.get('redirect');
+
+  if (redirectParam === 'true') {
+    window.location.replace(window.location.pathname);
+  }
+
   const [brewery, setBrewery] = useState([])
   const [search, setSearch] = useState('')
   const navigate = useNavigate();
@@ -53,11 +60,13 @@ const Home = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getBrewery()
+      const data = await BreweryApiService().getBrewery()
       setBrewery(data)
     }
     getData()
   }, [])
+
+
     return (
         <div>
           

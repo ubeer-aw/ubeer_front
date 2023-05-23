@@ -3,8 +3,7 @@ import { Grid, Box, Card, CardActionArea, CardMedia, CardHeader, CardContent, Ty
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams  } from 'react-router-dom';
 import Appbar from '../appbar/Appbar';
-import { getProductById } from '../../../service/product.service';
-import { getBreweryById } from '../../../service/brewery.service';
+import BreweryApiService from '../../../service/brewery.service';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const theme = createTheme({
@@ -36,7 +35,7 @@ export default function Product() {
       
     useEffect(() => {
       const getData = async () => {
-        const data = await getBreweryById(params.brewery)
+        const data = await BreweryApiService().getBreweryById(params.brewery)
         setBrewery(data)
         console.log(data)
       }

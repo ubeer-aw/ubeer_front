@@ -15,6 +15,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
+import LoginButton from '../Auth/LoginButton';
+import RegisterButton from '../Auth/RegisterButton';
+import LogoutButton from '../Auth/LogoutButton';
 
 const theme = createTheme({
   status: {
@@ -41,6 +45,7 @@ export default function TemporaryDrawer() {
     left: false,
   });
   const navigate = useNavigate();
+  const { user } = useAuth0();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -58,10 +63,18 @@ export default function TemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-        <Stack spacing={1}>
-            <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}}>Inscription</Button>
-            <Button disableElevation variant="contained" color="grey"  size="large" sx={{textTransform: 'none'}}>Connexion</Button>
-        </Stack>
+            { user ? (
+              <Stack spacing={1}>
+                <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}} onClick={()=>navigate("/profile")}>Mon Compte</Button>
+                <LogoutButton></LogoutButton>
+              </Stack>
+            ) : (
+              <Stack spacing={1}>
+                <RegisterButton></RegisterButton>
+                <LoginButton></LoginButton>
+              </Stack>
+            )}
+        
         <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none', textAlign: 'left'}} onClick={()=>navigate("/ajouter-une-brasserie")}>Ajoutez votre brasserie</Button><br></br>
         <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none', textAlign: 'left'}}>Créez un compte professionnel</Button><br></br>
         <Button variant="text" disableElevation color="dark" size="medium" sx={{textTransform: 'none', textAlign: 'left'}}>Devenez coursier-partenaire</Button>

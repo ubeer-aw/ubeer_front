@@ -1,63 +1,62 @@
-import axios from 'axios'
+import publicAPI from './Config/publicAxiosConfig';
+import privateAPI from './Config/privateAxiosConfig';
 
-const api = axios.create({
-  baseURL: "http://ubeer-back--uf92q9y.icypond-fbdb4d78.francecentral.azurecontainerapps.io/",
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-  timeout: 10000
-})
+export default function BreweryApiService() {
 
-const getBrewery = async () => {
-  try {
-    const response = await api.get('/brewery')
-    return response.data
-  } catch (error) {
-    console.error(error)
-  }
-}
 
-const getBreweryById = async (id) => {
+  ///// PUBLIC API (WITHOUT JWT TOKEN)
+  const getBrewery = async () => {
     try {
-        const response = await api.get(`/brewery/${id}`)
-        return response.data
+      const response = await publicAPI.get('/brewery');
+      return response.data;
     } catch (error) {
-        console.error(error)
+      console.error(error);
     }
-}
+  };
 
-const saveBrewery = async (jsonBrewery) => {
+  const getBreweryById = async (id) => {
     try {
-        const response = await api.patch(`/brewery`, jsonBrewery)
-        return response.data
+      const response = await publicAPI.get(`/brewery/${id}`);
+      return response.data;
     } catch (error) {
-        console.error(error)
+      console.error(error);
     }
-}
+  };
 
-const addBrewery = async (jsonBrewery) => {
-  try {
-      const response = await api.post(`/brewery`, jsonBrewery)
-      return response.data
-  } catch (error) {
-      console.error(error)
-  }
-}
 
-const deleteBrewery = async (id) => {
-  try {
-      const response = await api.delete(`/brewery/${id}`)
-      return response.data
-  } catch (error) {
-      console.error(error)
-  }
-}
+  //// PRIVATE API (WITH JWT TOKEN)
+  const saveBrewery = async (jsonBrewery) => {
+    try {
+      const response = await privateAPI.patch(`/brewery`, jsonBrewery);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-export {
+  const addBrewery = async (jsonBrewery) => {
+    try {
+      const response = await privateAPI.post(`/brewery`, jsonBrewery);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteBrewery = async (id) => {
+    try {
+      const response = await privateAPI.delete(`/brewery/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return {
     getBrewery,
     getBreweryById,
     addBrewery,
     saveBrewery,
-    deleteBrewery
+    deleteBrewery,
+  };
 }

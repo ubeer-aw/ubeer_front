@@ -3,7 +3,7 @@ import { Box, AppBar, Toolbar, Typography, IconButton, Grid, Card, CardActionAre
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import CloseIcon from '@mui/icons-material/Close';
-import { getBreweryById, deleteBrewery } from '../../../service/brewery.service';
+import BreweryApiService from '../../../service/brewery.service';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -91,7 +91,7 @@ export default function ProductCrud() {
 
     useEffect(() => {
         const getData = async () => {
-          const data = await getBreweryById(params.id)
+          const data = await BreweryApiService().getBreweryById(params.id)
           setBrewery(data)
           setProducts(data.products)
         }
@@ -102,7 +102,7 @@ export default function ProductCrud() {
     const handleDeleteProductClick = (id) => () => {
       setProducts(products.filter(product => product.id !== id))
       const getData = async () => {
-        await deleteProduct(id).then(response => {
+        await BreweryApiService().deleteProduct(id).then(response => {
           setProducts(products.filter(product => product.id !== id))
         })
         .catch(error => {
@@ -120,7 +120,7 @@ export default function ProductCrud() {
 
     const handleDeleteBreweryClick = (id) => () => {
       const getData = async () => {
-        await deleteBrewery(id).then(response => {
+        await BreweryApiService().deleteBrewery(id).then(response => {
           navigate('/');
         })
         .catch(error => {console.log(error)});
