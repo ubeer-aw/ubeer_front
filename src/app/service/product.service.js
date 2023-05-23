@@ -1,7 +1,6 @@
 import publicAPI from './Config/publicAxiosConfig';
 import privateAPI from './Config/privateAxiosConfig';
 
-
 ///// PUBLIC API (WITHOUT JWT TOKEN)
 const getProductById = async (productId) => {
   try {
