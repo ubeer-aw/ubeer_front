@@ -4,9 +4,9 @@ import privateAPI from './Config/privateAxiosConfig';
 export default function BreweryApiService() {
 
   ///// PUBLIC API (WITHOUT JWT TOKEN)
-  const getBrewery = async () => {
+  const getBrewery = async (page, size) => {
     try {
-      const response = await publicAPI.get('/brewery');
+      const response = await publicAPI.get(`/brewery?page=${page}&size=${size}`);
       return response.data;
     } catch (error) {
       console.error(error);
