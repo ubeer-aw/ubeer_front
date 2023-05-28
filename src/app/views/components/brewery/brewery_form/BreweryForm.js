@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Box, AppBar, Toolbar, Typography, Container, TextField, Button, IconButton  } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Container, TextField, Button, Grid, IconButton, FormLabel, FormControlLabel, Checkbox  } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import BreweryApiService from '../../../../service/brewery.service';
@@ -32,10 +32,12 @@ export default function BreweryForm(props) {
     const params = useParams();
     const [edit, setEdit] = useState(props.edit);
     const [brewery, setBrewery] = useState(null);
+    const [breweryCategory, setBreweryCategory] = useState([]);
     const [isSubmit, setIsSubmit] = useState(false);
+    const [checkedList, setCheckedList] = useState([]);
 
     useEffect(() => {
-      const getData = async () => {
+      const getBrewery = async () => {
         if(edit === true) {
           const data = await BreweryApiService().getBreweryById(params.id)
           setBrewery(data)
@@ -49,7 +51,12 @@ export default function BreweryForm(props) {
         }
         
       }
-      getData()
+      getBrewery()
+      const getBreweryCategory = async () => {
+        const data = await BreweryApiService().getBreweryCategory()
+        setBreweryCategory(data)
+      }
+      getBreweryCategory()
     }, [])
 
     const handleSubmit = async (event) => {
@@ -64,8 +71,9 @@ export default function BreweryForm(props) {
             "description": data.get('description'),
             "img": data.get('img'),
             "stars": data.get('stars'),
+            "categories": []
           }
-          await BreweryApiService().saveBrewery(jsonBrewery).then(response => {
+          await BreweryApiService().saveBrewery(checkedList, jsonBrewery).then(response => {
             navigate('/gestion-brasserie/' + brewery.id);
             })
             .catch(error => {
@@ -78,8 +86,9 @@ export default function BreweryForm(props) {
             "description": data.get('description'),
             "img": data.get('img'),
             "stars": data.get('stars'),
+            "categories": []
           }
-          await BreweryApiService().addBrewery(jsonBrewery).then(response => {
+          await BreweryApiService().addBrewery(checkedList, jsonBrewery).then(response => {
           navigate('/');
           })
           .catch(error => {});
@@ -89,6 +98,15 @@ export default function BreweryForm(props) {
       if (brewery == null) {
         return <Loading/>;
       }
+
+      const handleCheckboxChange = (event) => {
+        const { name, checked } = event.target;
+        if (checked) {
+          setCheckedList([...checkedList, name]);
+        } else {
+          setCheckedList(checkedList.filter((checkbox) => checkbox !== name));
+        }
+      };
   return (
     <div>
         <ThemeProvider theme={theme}>
@@ -167,6 +185,18 @@ export default function BreweryForm(props) {
                         type="text"
                         id="img"
                         />
+                      <FormLabel sx={{ paddingTop:'2%'}} component="legend">Catégories</FormLabel>
+                      <Grid container spacing={1} sx={{ paddingLeft:'20%', paddingTop:'3%'}}>
+                        {breweryCategory.map((category) => (
+                          <Grid item xs={6} sm={6} md={6} key={category.id}>
+                            <FormControlLabel
+                              label={category.name}
+                              control={<Checkbox name={category.name} onChange={handleCheckboxChange} />}
+                            />
+                          </Grid>
+                        ))}
+                      </Grid>
+
 
                         <Button
                         type="submit"

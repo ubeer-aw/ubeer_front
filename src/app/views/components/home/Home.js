@@ -1,6 +1,6 @@
 import Appbar from '../appbar/Appbar';
 import React, { useState, useEffect } from 'react';
-import { Grid, Card, CardContent, CardHeader, CardMedia, Typography, CardActionArea, Badge, IconButton, Pagination, Skeleton, Box  } from '@mui/material';
+import { Grid, Card, CardContent, CardHeader, CardMedia, Typography, CardActionArea, Badge, IconButton, Pagination, Skeleton, Box, FormLabel, FormControlLabel, Checkbox, checked,   } from '@mui/material';
 import cardImage from '../../../image/img.jpg';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -45,12 +45,14 @@ const Home = () => {
   }
 
   const [brewery, setBrewery] = useState([])
+  const [breweryCategory, setBreweryCategory] = useState([])
   const [search, setSearch] = useState('')
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1)
   const [nbItem, setNbItem] = useState(9)
   const [totalPages, setTotalPages] = useState(0)
   const [isLoading, setisLoading] = useState(true)
+  const [checkedList, setCheckedList] = useState([]);
 
   const toggleLike = (card) => {
     /*
@@ -81,69 +83,106 @@ const Home = () => {
   }
 
   useEffect(() => {
-    const getData = async () => {
-      const data = await BreweryApiService().getBrewery(currentPage, nbItem)
+    const getBrewery = async () => {
+      const data = await BreweryApiService().getBrewery(checkedList.join(","), currentPage, nbItem)
       setBrewery(data.content)
       setTotalPages(data.totalPages)
       setisLoading(false)
     }
-    getData()
-  }, [])
+    getBrewery()
+    const getBreweryCategory = async () => {
+      const data = await BreweryApiService().getBreweryCategory()
+      setBreweryCategory(data)
+    }
+    getBreweryCategory()
+  }, [checkedList])
+
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    if (checked) {
+      setCheckedList([...checkedList, name]);
+    } else {
+      setCheckedList(checkedList.filter((checkbox) => checkbox !== name));
+    }
+  };
+  
 
 
     return (
         <div>
           <Appbar name={search} onNameChange={setSearch}/>
-          <div name="card_list" style={{paddingLeft: '25%', paddingTop:'3%', paddingRight:'3%'}}>
-          <Typography align="left" variant='h4' sx={{fontWeight:600, paddingBottom:'2%'}}>
-            Brasseries <img alt="" role="presentation" src="https://d4p17acsd5wyj.cloudfront.net/eatsfeed/other_icons/Vector.png" width="14" height="14"></img>
-          </Typography>
-          { isLoading ?
-            (
-              <Grid container spacing={2}>
-                {Array.from(Array(9).keys()).map((index) => (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
-                    <Skeleton variant="rectangular" sx={{
-                        height: { xs: 150, sm: 200, md: 300 },
-                      }} animation="wave" />
-                    <Skeleton animation="wave" width="40%"  height={20} style={{ marginTop: 5 }} />
-                    <Skeleton animation="wave" width="60%"  height={20} />
-                  </Grid>
+          <Grid container spacing={2}>
+          <Grid item md={2}>
+            <div name="card_list" style={{paddingLeft: '10%', paddingTop:'14%', paddingRight:'3%'}}>
+              <Typography align="left" variant='h4' sx={{fontWeight:600, paddingBottom:'2%'}}>
+                Filtre 
+              </Typography>
+              <FormLabel component="legend">Catégories</FormLabel>
+              <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+                {breweryCategory?.map(breweryCategory => (
+                              <FormControlLabel
+                              label={breweryCategory.name}
+                              control={<Checkbox name={breweryCategory.name} onChange={handleCheckboxChange} />}
+                            />
                 ))}
-              </Grid> 
-            )
-            :
-            (
-              <Grid container spacing={3}>
-                {brewery?.filter(brewery => brewery.name.toLowerCase().includes(search.toLowerCase())).map(card => (
-                  <Grid item xs={12} sm={6} md={4} key={card.id}>
-                    <Card elevation={0} sx={{ borderRadius: 0 }}>
-                    <CardActionArea onClick={()=>navigate("/brasserie/" + card.id)}>
-                      <CardMedia image={card.img} title="Card Image" style={{ height: 0, paddingTop: '56.25%' }} />
-                      <CardHeader title={card.name}   titleTypographyProps={{ fontSize: '14px', fontWeight:550 }} sx={{paddingLeft:'1%', paddingTop: '3%', paddingBottom:0}}/>
-                      <IconButton onClick={() => toggleLike(card)} sx={{position:'absolute', top:'4%', right:'4%', color:'white'}}>
-                      {0 ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-                      </IconButton>
-                      <ThemeProvider theme={theme}>
-                        <p style={{position:'absolute', right:'6%', top:'78%'}}><Badge badgeContent="4" color="grey"/></p>
-                      </ThemeProvider>
-                      <CardContent  sx={{paddingLeft:'1%', paddingTop:'1%', paddingRight:0, paddingBottom:0}}>
-                        <Typography align="left" variant='caption'>
-                          <img src="https://dkl8of78aprwd.cloudfront.net/uber_one@3x.png" width="11" height="11"/> • Frais de livraison : 2.49 € • 10-25 min
-                        </Typography>
-                      </CardContent>
-                      </CardActionArea>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-            )
-          }
-
-          <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" sx={{ minHeight: '5vh' }}>
-            <Pagination count={totalPages} defaultPage={1} onChange={changePage} showFirstButton showLastButton disabled={isLoading} size="large"/>
+                
+              </Box>
+            </div>
           </Grid>
-          </div>
+          <Grid item md={10}>
+            <div name="card_list" style={{paddingLeft: '3%', paddingTop:'3%', paddingRight:'3%'}}>
+            <Typography align="left" variant='h4' sx={{fontWeight:600, paddingBottom:'2%'}}>
+              Brasseries <img alt="" role="presentation" src="https://d4p17acsd5wyj.cloudfront.net/eatsfeed/other_icons/Vector.png" width="14" height="14"></img>
+            </Typography>
+            { isLoading ?
+              (
+                <Grid container spacing={2}>
+                  {Array.from(Array(9).keys()).map((index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                      <Skeleton variant="rectangular" sx={{
+                          height: { xs: 150, sm: 200, md: 300 },
+                        }} animation="wave" />
+                      <Skeleton animation="wave" width="40%"  height={20} style={{ marginTop: 5 }} />
+                      <Skeleton animation="wave" width="60%"  height={20} />
+                    </Grid>
+                  ))}
+                </Grid> 
+              )
+              :
+              (
+                <Grid container spacing={3}>
+                  {brewery?.filter(brewery => brewery.name.toLowerCase().includes(search.toLowerCase())).map(card => (
+                    <Grid item xs={12} sm={6} md={4} key={card.id}>
+                      <Card elevation={0} sx={{ borderRadius: 0 }}>
+                      <CardActionArea onClick={()=>navigate("/brasserie/" + card.id)}>
+                        <CardMedia image={card.img} title="Card Image" style={{ height: 0, paddingTop: '56.25%' }} />
+                        <CardHeader title={card.name}   titleTypographyProps={{ fontSize: '14px', fontWeight:550 }} sx={{paddingLeft:'1%', paddingTop: '3%', paddingBottom:0}}/>
+                        <IconButton onClick={() => toggleLike(card)} sx={{position:'absolute', top:'4%', right:'4%', color:'white'}}>
+                        {0 ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                        </IconButton>
+                        <ThemeProvider theme={theme}>
+                          <p style={{position:'absolute', right:'6%', top:'78%'}}><Badge badgeContent="4" color="grey"/></p>
+                        </ThemeProvider>
+                        <CardContent  sx={{paddingLeft:'1%', paddingTop:'1%', paddingRight:0, paddingBottom:0}}>
+                          <Typography align="left" variant='caption'>
+                            <img src="https://dkl8of78aprwd.cloudfront.net/uber_one@3x.png" width="11" height="11"/> • Frais de livraison : 2.49 € • 10-25 min
+                          </Typography>
+                        </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+              )
+            }
+
+            <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" sx={{ minHeight: '5vh' }}>
+              <Pagination count={totalPages} defaultPage={1} onChange={changePage} showFirstButton showLastButton disabled={isLoading} size="large"/>
+            </Grid>
+            </div>
+            </Grid>
+        </Grid>
       </div>
         )
 }

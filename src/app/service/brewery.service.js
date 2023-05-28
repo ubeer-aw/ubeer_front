@@ -4,9 +4,10 @@ import privateAPI from './Config/privateAxiosConfig';
 export default function BreweryApiService() {
 
   ///// PUBLIC API (WITHOUT JWT TOKEN)
-  const getBrewery = async (page, size) => {
+  const getBrewery = async (checkedList, page, size) => {
+
     try {
-      const response = await publicAPI.get(`/brewery?page=${page}&size=${size}`);
+      const response = await publicAPI.get(`/brewery?categories=${checkedList}&page=${page}&size=${size}`);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -22,20 +23,29 @@ export default function BreweryApiService() {
     }
   };
 
-
-  //// PRIVATE API (WITH JWT TOKEN)
-  const saveBrewery = async (jsonBrewery) => {
+  const getBreweryCategory = async () => {
     try {
-      const response = await privateAPI.patch(`/brewery?email=${localStorage.getItem('user_email')}`, jsonBrewery);
+      const response = await publicAPI.get(`/brewery/category`);
       return response.data;
     } catch (error) {
       console.error(error);
     }
   };
 
-  const addBrewery = async (jsonBrewery) => {
+
+  //// PRIVATE API (WITH JWT TOKEN)
+  const saveBrewery = async (checkedList, jsonBrewery) => {
     try {
-      const response = await privateAPI.post(`/brewery?email=${localStorage.getItem('user_email')}`, jsonBrewery);
+      const response = await privateAPI.patch(`/brewery?categories=${checkedList}&email=${localStorage.getItem('user_email')}`, jsonBrewery);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addBrewery = async (checkedList, jsonBrewery) => {
+    try {
+      const response = await privateAPI.post(`/brewery?categories=${checkedList}&email=${localStorage.getItem('user_email')}`, jsonBrewery);
       return response.data;
     } catch (error) {
       console.error(error);
@@ -52,6 +62,7 @@ export default function BreweryApiService() {
   };
 
   return {
+    getBreweryCategory,
     getBrewery,
     getBreweryById,
     addBrewery,
