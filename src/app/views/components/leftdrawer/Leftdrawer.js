@@ -45,7 +45,7 @@ export default function TemporaryDrawer() {
     left: false,
   });
   const navigate = useNavigate();
-  const { user } = useAuth0();
+  const {isAuthenticated, user } = useAuth0();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -63,7 +63,7 @@ export default function TemporaryDrawer() {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-            { user ? (
+            { isAuthenticated ? (
               <Stack spacing={1}>
                 <Button disableElevation variant="contained" color="dark"  size="large" sx={{textTransform: 'none'}} onClick={()=>navigate("/profile")}>Mon Compte</Button>
                 <LogoutButton></LogoutButton>
