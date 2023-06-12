@@ -196,7 +196,7 @@ const Home = () => {
                         {0 ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                         </IconButton>
                         <ThemeProvider theme={theme}>
-                          <p style={{position:'absolute', right:'6%', top:'78%'}}><Badge badgeContent="4" color="grey"/></p>
+                          <p style={{position:'absolute', right:'6%', top:'85%'}}><Badge badgeContent="4" color="grey"/></p>
                         </ThemeProvider>
                         <CardContent  sx={{paddingLeft:'1%', paddingTop:'1%', paddingRight:0, paddingBottom:0}}>
                           <Typography align="left" variant='caption'>

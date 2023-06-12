@@ -70,11 +70,7 @@ export default function Brewery() {
                 <h1>{brewery?.name} - Nantes</h1>
             </Grid>
 
-            <Grid item xs={4} sm={4} md={3}>
-                <h3>Catégories</h3>
-            </Grid>
-
-            <Grid item xs={8} sm={8} md={9}>
+            <Grid item xs={12} sm={12} md={12}>
                 <Grid item xs={12}>
                     <h3>Nos produits</h3>
                 </Grid>

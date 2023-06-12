@@ -31,7 +31,7 @@ const theme = createTheme({
     },
   });
 export default function ProductCrud() {
-  const {user} = useAuth0();
+  const {user, isAuthenticated, isLoading} = useAuth0();
     const navigate = useNavigate();
     const [brewery, setBrewery] = useState(null)
     const [products, setProducts] = useState([])
@@ -96,16 +96,16 @@ export default function ProductCrud() {
           const data = await BreweryApiService().getBreweryById(params.id)
           setBrewery(data)
           setProducts(data.products)
-          if(brewery?.user){
-            if(localStorage.getItem('user_email') != brewery.user.email) {
-              navigate('/')
-            }
-          }
         }
         getData()
     }, [])
 
-    
+    if(!isLoading) {
+      if(brewery?.user?.email != user?.email) {
+        navigate('/')
+      }
+    } 
+
     const handleDeleteProductClick = (id) => () => {
       setProducts(products.filter(product => product.id !== id))
       const getData = async () => {

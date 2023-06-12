@@ -40,8 +40,8 @@ export default function ProductForm(props) {
       const getData = async () => {
         if(edit === true) {
           const data = await ProductApiService().getProductById(params.id)
-          setProduct(data)
-          setBreweryId(data.brewery)
+          setProduct(data.data)
+          setBreweryId(data.data.brewery)
         } else {
           setProduct([])
           setBreweryId(params.id)
