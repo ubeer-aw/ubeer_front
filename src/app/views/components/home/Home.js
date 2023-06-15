@@ -101,6 +101,7 @@ const Home = () => {
 
   useEffect(() => {
     setisBreweryLoading(true)
+    setisFilterLoading(true)
     const getBrewery = async () => {
       const data = await BreweryApiService().getBrewery(search, checkedList.join(","), currentPage, nbItem)
       setBrewery(data.content)
